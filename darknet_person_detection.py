@@ -46,7 +46,7 @@ def cvDrawBoxes(detections, img):
                             " [" + str(round(detection[1] * 100, 2)) + "]",
                             (pt1[0], pt1[1] - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                             red, 2)
-            person_detection += 1
+                person_detection += 1
         cv2.putText(img,
                     "Total people %s" % str(person_detection), (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 1,
                     [0, 255, 50], 2)
