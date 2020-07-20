@@ -33,6 +33,7 @@ class CamStream(Thread):
 
     def set_frame_rate(self, duration):
         self.frame_rate = self.parse_frame(duration)
+
     def get_frame_rate(self):
         return self.frame_rate
 
@@ -72,21 +73,32 @@ if __name__ == "__main__":
 
     cap.start()
 
-    #while not cap.is_ready():
+    # while not cap.is_ready():
     #    time.sleep(5)
 
     prev_time = time.time()
+    elapsed = cap.get_frame_rate()
     image_to_show = None
     while True:
         im = cap.get_latest_frame()
-        elapsed = time.time() - prev_time
-        if elapsed > cap.get_frame_rate():
+        if elapsed >= cap.get_frame_rate():
             print(elapsed)
-            show_im = im
-            prev_time = time.time()
+            image_to_show = im
+        else:
+            elapsed = time.time() - prev_time
+            continue
+
         if image_to_show is None:
             continue
+
+        prev_time = time.time()
+
+        ###############################
+        # do something costly in here #
+        ###############################
+
         cv2.imshow("demo", image_to_show)
+        elapsed = time.time() - prev_time
         if cv2.waitKey(20) & 0xFF == ord('q'):
             break
 
