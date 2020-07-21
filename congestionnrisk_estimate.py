@@ -153,7 +153,8 @@ def cvDrawBoxes(detections, img):
             
         # estimate risk
         close_object_num = len(close_objects)
-        risk = close_object_num/dist_num
+        if dist_num > 0:
+            risk = close_object_num/dist_num
 
         if mask_detection > 0:
             level = "high risk"
@@ -223,12 +224,12 @@ def YOLO():
         except Exception:
             pass
     #cap = cv2.VideoCapture(0)                                      # Uncomment to use Webcam
-    cap = cv2.VideoCapture("real_3.mp4")                             # Local Stored video detection - Set input video
+    cap = cv2.VideoCapture("test.mp4")                             # Local Stored video detection - Set input video
     frame_width = int(cap.get(3))                                   # Returns the width and height of capture video
     frame_height = int(cap.get(4))
     # Set out for video writer
     out = cv2.VideoWriter(                                          # Set the Output path for video writer
-        "output_3.avi", cv2.VideoWriter_fourcc(*"MJPG"), 10.0,
+        "output_test.avi", cv2.VideoWriter_fourcc(*"MJPG"), 10.0,
         (frame_width, frame_height))
 
     print("Starting the YOLO loop...")
