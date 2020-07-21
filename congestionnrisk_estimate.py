@@ -83,7 +83,7 @@ def cvDrawBoxes(detections, img):
                 pos_dict[objectId] = (x_mid_cm,y_mid_cm,distance)
 
                 objectId += 1 #Increment the index for each detection
-"""
+
             if name_tag == 'mask_weared':                
                 x, y, w, h = detection[2][0],\
                             detection[2][1],\
@@ -114,8 +114,6 @@ def cvDrawBoxes(detections, img):
                             (pt1[0], pt1[1] - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                             red, 2)
                 no_mask_detection += 1
-"""
-
 
         # distance
         dist_num = 0
