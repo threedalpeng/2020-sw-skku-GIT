@@ -6,3 +6,5 @@
 데이터셋 링크: https://drive.google.com/file/d/1gKOuM1-KvvEzvZM8OzGGQhEeb9J6P2ZU/view?usp=sharing
 
 `darknet/data/`에 붙여넣기
+
+weights 링크: https://drive.google.com/file/d/1xzMt8BbaApettEdkbzeuHRiLYw63UzgH/view?usp=sharing
