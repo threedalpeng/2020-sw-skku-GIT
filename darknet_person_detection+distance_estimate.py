@@ -118,7 +118,7 @@ def cvDrawBoxes(detections, img):
         for i in pos_dict.keys():
             for j in pos_dict.keys():
                 if i < j:
-                   dist = sqrt(pow(pos_dict[i][0]-pos_dict[j][0],2) + pow(pos_dict[i][1]-pos_dict[j][1],2) + pow(pos_dict[i][2]-pos_dict[j][2],2))
+                   dist = np.sqrt(pow(pos_dict[i][0]-pos_dict[j][0],2) + pow(pos_dict[i][1]-pos_dict[j][1],2) + pow(pos_dict[i][2]-pos_dict[j][2],2))
 
                    # 1.5m 
                    if dist < 150:
