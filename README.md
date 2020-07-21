@@ -1,4 +1,4 @@
-# 2020-iuc-sw-skku-GIT
+# 2020-sw-skku-GIT
 [산학협력] 2020년 성균관대 산학협력프로젝트 굿모닝아이텍 
 
 
@@ -7,4 +7,6 @@
 
 `darknet/data/`에 붙여넣기
 
-weights 링크: https://drive.google.com/file/d/1xzMt8BbaApettEdkbzeuHRiLYw63UzgH/view?usp=sharing
+### Weights 파일
+
+작은 weights 링크: https://drive.google.com/file/d/1xzMt8BbaApettEdkbzeuHRiLYw63UzgH/view?usp=sharing
