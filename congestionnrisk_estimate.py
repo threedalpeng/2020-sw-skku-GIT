@@ -81,7 +81,7 @@ def cvDrawBoxes(detections, img):
                             detection[0].decode() +
                             " [" + str(round(detection[1] * 100, 2)) + "]",
                             (pt1[0], pt1[1] - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-                            red, 2)
+                            [0,255,50], 2)
                 mask_detection += 1
             if name_tag == 'mask_off':                
                 x, y, w, h = detection[2][0],\
@@ -159,18 +159,18 @@ def cvDrawBoxes(detections, img):
         if mask_detection > 0:
             level = "high risk"
             cv2.putText(img,
-                    "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10, 75), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                    "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10,125), cv2.FONT_HERSHEY_SIMPLEX, 1,
                     [255, 0, 0], 2)
         else:
             if risk < pro_peo*0.3:
                 level = "low risk"
-                cv2.putText(img, "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10, 75), cv2.FONT_HERSHEY_SIMPLEX, 1, [0, 255, 50], 2)
+                cv2.putText(img, "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 1, [0, 255, 50], 2)
             elif risk < pro_peo*0.5:
                 level = "risk"
-                cv2.putText(img, "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10, 75), cv2.FONT_HERSHEY_SIMPLEX, 1, [255, 255, 0], 2)
+                cv2.putText(img, "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 1, [255, 255, 0], 2)
             else:
                 level = "high risk"
-                cv2.putText(img, "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10, 75), cv2.FONT_HERSHEY_SIMPLEX, 1, [255, 0, 0], 2)
+                cv2.putText(img, "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 1, [255, 0, 0], 2)
         
     return img
 
