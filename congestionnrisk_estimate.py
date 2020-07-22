@@ -153,25 +153,26 @@ def cvDrawBoxes(detections, img):
             
         # estimate risk
         close_object_num = len(close_objects)
-        if dist_num > 0:
-            risk = close_object_num/dist_num
-
-        if mask_detection > 0:
+        
+        if no_mask_detection > 0:
             level = "high risk"
             cv2.putText(img,
-                    "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10,125), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                    [255, 0, 0], 2)
-        else:
-            if risk < pro_peo*0.3:
-                level = "low risk"
-                cv2.putText(img, "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 1, [0, 255, 50], 2)
-            elif risk < pro_peo*0.5:
-                level = "risk"
-                cv2.putText(img, "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 1, [255, 255, 0], 2)
-            else:
-                level = "high risk"
-                cv2.putText(img, "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 1, [255, 0, 0], 2)
+                    "risk: %s "% level, (10,125), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                    [255, 0, 0], 2)   
+        else:            
+            if dist_num > 0:
+                risk = close_object_num/dist_num
         
+                if risk < pro_peo*0.3:
+                    level = "low risk"
+                    cv2.putText(img, "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 1, [0, 255, 50], 2)
+                elif risk < pro_peo*0.5:
+                    level = "risk"
+                    cv2.putText(img, "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 1, [255, 255, 0], 2)
+                else:
+                    level = "high risk"
+                    cv2.putText(img, "risk: %s "% level + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 1, [255, 0, 0], 2)
+ 
     return img
 
 
