@@ -4,31 +4,35 @@ import time
 
 
 class CamStream(Thread):
-    def __init__(self, path=0, width=1280, height=720, frame_rate=".30"):
+    def __init__(self, path, width=None, height=None, frame_rate=".30"):
         super(CamStream, self).__init__()
         self.setDaemon(True)
-        self.cap = cv2.VideoCapture(path, cv2.CAP_DSHOW)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)  # CAP_PROP_FRAME_WIDTH
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)   # CAP_PROP_FRAME_HEIGHT\
+        self.cap = cv2.VideoCapture(path)
+        if width is not None:
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)  # CAP_PROP_FRAME_WIDTH
+        if height is not None:
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)   # CAP_PROP_FRAME_HEIGHT
         self.frame_rate = self.parse_frame(frame_rate)
         self.isRunning = False
         self.latestFrame = None
-        self.frameReady = False
         self.lock = Lock()
 
     def start(self):
+        print("start")
         with self.lock:
-            while not self.frameReady:
-                self.frameReady, self.latestFrame = self.cap.read()
+            while self.latestFrame is None:
+                frame_ready, self.latestFrame = self.cap.read()
         self.isRunning = True
+        print("ready")
         super().start()
 
     def run(self):
         while self.isRunning:
             with self.lock:
-                self.frameReady, latestFrame = self.cap.read()
-                if self.frameReady:
-                    self.latestFrame = latestFrame
+                frame_ready, latest_frame = self.cap.read()
+                if latest_frame is not None:
+                    # print('get')
+                    self.latestFrame = latest_frame
         super().run()
 
     def set_frame_rate(self, duration):
@@ -53,9 +57,7 @@ class CamStream(Thread):
         return float(hms[0])*3600 + float(hms[1])*60 + float(hms[2])
 
     def get_latest_frame(self):
-        if self.frameReady:
-            return self.latestFrame
-        elif self.latestFrame is not None:
+        if self.latestFrame is not None:
             return self.latestFrame
         else:
             #print("Error!")
@@ -69,7 +71,8 @@ class CamStream(Thread):
 # Example
 if __name__ == "__main__":
     cap = CamStream(path=0)
-    cap.set_frame_rate("00:00:08") # 8초에 한번씩 출력
+    cap.set_frame_rate("00:01:00")  # 1분에 한번씩 출력
+    # cap.set_frame_rate(".30")     # 30fps로 출력
 
     cap.start()
 
@@ -78,8 +81,12 @@ if __name__ == "__main__":
 
     prev_time = time.time()
     elapsed = cap.get_frame_rate()
+    after_show = False
     image_to_show = None
     while True:
+        if after_show and (cv2.waitKey(20) & 0xFF == ord('q')):
+            break
+
         im = cap.get_latest_frame()
         if elapsed >= cap.get_frame_rate():
             print(elapsed)
@@ -99,7 +106,6 @@ if __name__ == "__main__":
 
         cv2.imshow("demo", image_to_show)
         elapsed = time.time() - prev_time
-        if cv2.waitKey(20) & 0xFF == ord('q'):
-            break
+        after_show = True
 
     cap.stop()
