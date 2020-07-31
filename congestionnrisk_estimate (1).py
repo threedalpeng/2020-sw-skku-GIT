@@ -209,13 +209,17 @@ def cvDrawBoxes(detections, img):
                 total_den = cluster_den[0]
                 total_risk = cluster_risk[0]
             else:
-                n_edge = n_clusters_*(n_clusters_-1)/2
+                #n_edge = n_clusters_*(n_clusters_-1)/2
                 for a in range(n_clusters_):
                     for b in range(n_clusters_):
                         if a<b:
                             dist_c = pow(centers[a][0]-centers[b][0],2)+pow(centers[a][1]-centers[b][1],2)+pow(centers[a][2]-centers[b][2],2)
-                            total_den += (cluster_den[a] + cluster_den[b])*(1+1/(np.sqrt(dist_c)*0.01))/n_edge
-                            total_risk += (cluster_risk[a] + cluster_risk[b])*(1+1/(np.sqrt(dist_c)*0.01))/n_edge
+                            total_den += (cluster_den[a] * cluster_den[b])*(1+1/(np.sqrt(dist_c)*0.01))
+                            total_risk += (cluster_risk[a] * cluster_risk[b])*(1+1/(np.sqrt(dist_c)*0.01))
+            
+            total_den = total_den/n_clusters_
+            total_risk = total_risk/n_clusters_
+
             """
             for a in range(n_clusters_):
                 total_den += cluster_den[a]
@@ -229,6 +233,7 @@ def cvDrawBoxes(detections, img):
             
             #color_arr = [[255, 0, 0], [255, 50, 0], [255, 255, 0], [0, 255, 0], [0, 0, 255], [0, 5, 255]]
             color_arr = [[255, 0, 0], [255, 50, 0], [0, 255, 0], [0, 0, 255]]
+            
             #opencv에 나타내기
             for a in range(n_clusters_):               
                 d = centers[a][2]
@@ -253,7 +258,7 @@ def cvDrawBoxes(detections, img):
                 cv2.circle(overlay, (int(mon_cent[0]), int(mon_cent[1])), int(radi), color_arr[idx], -1)              
                 #cv2.circle(img, (int(mon_cent[0]), int(mon_cent[1])), int(radi), red, 5)               
                 cv2.line(img, (int(mon_cent[0]), int(mon_cent[1])), (int(mon_cent[0]), int(mon_cent[1])), color_arr[idx], 5)
-                #cv2.putText(img, "cluster_risk: %s "% str(cluster_risk[a]) , (int(mon_cent[0]), int(mon_cent[1])), cv2.FONT_HERSHEY_SIMPLEX, 1,  color_arr[idx], 2)
+                cv2.putText(img, "cluster_risk: %s "% str(cluster_risk[a]) , (int(mon_cent[0]), int(mon_cent[1])), cv2.FONT_HERSHEY_SIMPLEX, 1,  color_arr[idx], 2)
         print("\n")
         img = cv2.addWeighted(overlay, 0.3, img, 0.7, 0)
 
