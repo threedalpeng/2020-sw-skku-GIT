@@ -43,7 +43,17 @@ if __name__ == "__main__":
     img = cv2.imread("./img.png")
 
     # send data (image, data dictionary)
-    socket.send_data(img, {"msg": "hi"})
-
+    socket.send_data(
+        img,
+        {
+            "total_people": 10,
+            "mask_weared": 5,
+            "mask_off": 3,
+            "mask_incorrect": 2,
+            "conjestion": 3.2342,
+            "risk": 3.3423,
+        },
+    )
+    
     # wait socket event
     socket.wait()
