@@ -308,7 +308,7 @@ def cvDrawBoxes(detections, img):
                     idx = 3
                 elif cluster_risk[a] <=30:  #green
                     idx = 2
-                elif cluster_risk[a] <=100:  #orange
+                elif cluster_risk[a] <=50:  #orange
                     idx = 1
                 else:    #red
                     idx = 0
@@ -332,7 +332,7 @@ def cvDrawBoxes(detections, img):
             cv2.putText(img,
                     "congestion: %s "% level + "(%s)"%str(round(congestion,4)), (10, 75), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
                     [0, 255, 50], 2)        
-        elif congestion <= 100:
+        elif congestion <= 90:
             level = "normal"
             cv2.putText(img,
                     "congestion: %s "% level + "(%s)"%str(round(congestion,4)), (10, 75), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
