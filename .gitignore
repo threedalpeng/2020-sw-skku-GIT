@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Video file
+*.mp4
+
+# Yolov4
+*.weights

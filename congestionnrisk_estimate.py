@@ -22,10 +22,13 @@ class SocketClient:
     def wait(self):
         self.sio.wait()
 
+    def disconnect(self):
+        self.sio.disconnect()
+
     def send_data(self, img, data_dict, format=".png"):
         img_bin = self._ndarray2img(img, format=format)
         data_dict["img"] = img_bin
-        socket.emit("msg", data_dict)
+        self.sio.emit("msg", data_dict)
 
     @staticmethod
     @sio.event
@@ -56,7 +59,7 @@ def cvDrawBoxes(detections, img):
     # 3.1 Purpose : Filter out Persons class from detections and get 
     #           bounding box centroid for each person detection.
     #================================================================
-    space = 150        #space 값 받기(m^2)
+    space = 125        #space 값 받기(m^2)
     # Focal length
     F = 1080       #615
     red = (255, 0, 0)
@@ -337,9 +340,9 @@ def cvDrawBoxes(detections, img):
                                
                 if cluster_risk[a] <= 10:  #blue
                     idx = 3
-                elif cluster_risk[a] <=30:  #green
+                elif cluster_risk[a] <=20:  #green
                     idx = 2
-                elif cluster_risk[a] <=50:  #orange
+                elif cluster_risk[a] <=30:  #orange
                     idx = 1
                 else:    #red
                     idx = 0
@@ -354,25 +357,25 @@ def cvDrawBoxes(detections, img):
 
         # estimate congestion
         congestion = total_den
-        cv2.putText(img,
-                    "Total people: %s"%str(person_detection) + "Mask weared people: %s "%str(mask_detection) + "Mask off people: %s "%str(no_mask_detection) + "Mask incorrected people: %s"%str(incorrect_detection), (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
-                    [0, 255, 50], 2)
+        #cv2.putText(img,
+        #            "Total people: %s"%str(person_detection) + "Mask weared people: %s "%str(mask_detection) + "Mask off people: %s "%str(no_mask_detection) + "Mask incorrected people: %s"%str(incorrect_detection), (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
+        #            [0, 255, 50], 2)
         
         if congestion <= 30:
             level_c = "spare"
-            cv2.putText(img,
-                    "congestion: %s "% level_c + "(%s)"%str(round(congestion,4)), (10, 75), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
-                    [0, 255, 50], 2)        
+            #cv2.putText(img,
+            #        "congestion: %s "% level_c + "(%s)"%str(round(congestion,4)), (10, 75), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
+            #        [0, 255, 50], 2)        
         elif congestion <= 90:
             level_c = "normal"
-            cv2.putText(img,
-                    "congestion: %s "% level_c + "(%s)"%str(round(congestion,4)), (10, 75), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
-                    [255, 255, 0], 2)
+            #cv2.putText(img,
+            #        "congestion: %s "% level_c + "(%s)"%str(round(congestion,4)), (10, 75), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
+            #        [255, 255, 0], 2)
         else:
             level_c = "congestion"
-            cv2.putText(img,
-                    "congestion: %s "% level_c + "(%s)"%str(round(congestion,4)), (10, 75), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
-                    [255, 0, 0], 2)
+            #cv2.putText(img,
+            #        "congestion: %s "% level_c + "(%s)"%str(round(congestion,4)), (10, 75), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
+            #        [255, 0, 0], 2)
             
         # estimate risk
         #close_object_num = total_den
@@ -383,13 +386,13 @@ def cvDrawBoxes(detections, img):
         
         if risk < 50:
             level_r = "low risk"
-            cv2.putText(img, "risk: %s "% level_r + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 0.75, [0, 255, 50], 2)
+            #cv2.putText(img, "risk: %s "% level_r + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 0.75, [0, 255, 50], 2)
         elif risk < 100:
             level_r = "intermediate risk"
-            cv2.putText(img, "risk: %s "% level_r + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 0.75, [255, 255, 0], 2)
+            #cv2.putText(img, "risk: %s "% level_r + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 0.75, [255, 255, 0], 2)
         else:
             level_r = "high risk"
-            cv2.putText(img, "risk: %s "% level_r + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 0.75, [255, 0, 0], 2) 
+            #cv2.putText(img, "risk: %s "% level_r + "(%s)"%str(round(risk, 4)), (10, 125), cv2.FONT_HERSHEY_SIMPLEX, 0.75, [255, 0, 0], 2) 
     
     dict_result = {}
     dict_result["total_people"] = person_detection
@@ -448,8 +451,8 @@ def YOLO():
                     pass
         except Exception:
             pass
-    cap = cv2.VideoCapture(0)                                      # Uncomment to use Webcam
-    #cap = cv2.VideoCapture("test.mp4")                             # Local Stored video detection - Set input video
+    #cap = cv2.VideoCapture(0)                                      # Uncomment to use Webcam
+    cap = cv2.VideoCapture("test_0803_03.mp4")                          # Local Stored video detection - Set input video
     frame_width = int(cap.get(3))                                   # Returns the width and height of capture video
     frame_height = int(cap.get(4))
     # Set out for video writer
@@ -458,7 +461,7 @@ def YOLO():
         (frame_width, frame_height))
 
     print("Starting the YOLO loop...")
-    socket = SocketClient("http://localhost:3000")
+    socket = SocketClient("http://115.145.212.100:53344")
 
     # Create an image we reuse for each detect
     darknet_image = darknet.make_image(frame_width, frame_height, 3) # Create image according darknet for compatibility of network
@@ -488,13 +491,14 @@ def YOLO():
         socket.send_data(image, dict_result)
 
         # wait socket event
-        #socket.wait()
+        # socket.wait()
   
         cv2.waitKey(3)
         out.write(image)                                             # Write that frame into output video
     cap.release()                                                    # For releasing cap and out. 
     out.release()
     print(":::Video Write Completed")
+    socket.disconnect()
 
 if __name__ == "__main__":  
     YOLO()                                                           # Calls the main function YOLO()
